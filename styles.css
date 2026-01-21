@@ -1,0 +1,144 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Layout */
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+header {
+  background: #1877f2;
+  padding: 15px;
+  display: flex;
+  justify-content: space-around;
+}
+
+header button {
+  background: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.view {
+  display: none;
+  padding: 25px;
+}
+
+.view.active {
+  display: block;
+}
+
+/* Offline banner */
+.offline {
+  background: red;
+  padding: 10px;
+  color: white;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+/* CAMERA */
+#camera {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 10px;
+}
+
+#photoCanvas {
+  margin-top: 15px;
+  display: none;
+  width: 100%;
+  max-width: 450px;
+}
+
+/* GALLERY GRID */
+#gallery {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 20px;
+}
+
+/* PHOTO BOX */
+.photo-box {
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.photo-box:hover {
+  transform: scale(1.05);
+}
+
+/* PHOTO THUMB */
+.gallery-photo {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* DELETE BUTTON */
+.delete-photo-btn {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.delete-photo-btn:hover {
+  background: #cc0000;
+}
+
+/* --- MODAL (powiększanie zdjęć) --- */
+#photoModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+#photoModal.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+#modalImage {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+  animation: zoomIn 0.25s ease;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

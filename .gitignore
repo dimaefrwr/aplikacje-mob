@@ -1,0 +1,40 @@
+# Zależności Node.js
+node_modules/
+package-lock.json
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logi
+*.log
+npm-debug.log*
+logs/
+
+# Pliki IDE/edytorów
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Pliki tymczasowe
+*.tmp
+*.temp
+.cache/
+
+# Build files (jeśli byś używał buildera)
+dist/
+build/
+
+# Environment variables (gdybyś dodał API keys)
+.env
+.env.local
+.env.production
+
+# Testy
+coverage/
+.nyc_output/

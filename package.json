@@ -1,0 +1,14 @@
+{
+  "name": "pwa-photo-locator",
+  "version": "1.0.0",
+  "description": "Prosta PWA: kamera, lokalizacja, offline, instalacja.",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
