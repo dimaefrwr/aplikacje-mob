@@ -1,6 +1,5 @@
 //🔹 REJESTRACJA SERVICE WORKERA
-// Service Worker umożliwia działanie aplikacji offline poprzez cachowanie zasobów.
-// Rejestrujemy go przy pierwszym załadowaniu strony.
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js")
     .then(() => console.log("✅ Service Worker zarejestrowany"))
@@ -8,8 +7,6 @@ if ("serviceWorker" in navigator) {
 }
 
 //🔹 ZARZĄDZANIE WIDOKAMI
-// Aplikacja działa jako SPA (Single Page Application).
-// Użytkownik przełącza się między widokami bez przeładowania strony.
 const views = document.querySelectorAll(".view");
 const homeBtn = document.getElementById("homeBtn");
 const cameraBtn = document.getElementById("cameraBtn");
@@ -28,8 +25,7 @@ function showView(id) {
 }
 
 // 🔹 GEOLOKALIZACJA
-// Wykorzystujemy Geolocation API do pobrania współrzędnych GPS użytkownika.
-// Przydatne do tagowania zdjęć lokalizacją.
+
 const locationOutput = document.getElementById("locationOutput");
 document.getElementById("getLocation").addEventListener("click", () => {
   if ("geolocation" in navigator) {
@@ -46,7 +42,7 @@ document.getElementById("getLocation").addEventListener("click", () => {
 });
 
 // 🔹 OBSŁUGA KAMERY
-// Używamy MediaDevices API (getUserMedia) do dostępu do kamery urządzenia.
+
 const video = document.getElementById("camera");
 const captureBtn = document.getElementById("captureBtn");
 const canvas = document.getElementById("photoCanvas");
@@ -55,17 +51,14 @@ const gallery = document.getElementById("gallery");
 let stream;
 
 // 🚀 URUCHAMIANIE KAMERY
-// Blokujemy przycisk do momentu pełnej inicjalizacji streamu wideo.
-// Zapobiega to próbom zrobienia zdjęcia zanim kamera jest gotowa.
+
 async function startCamera() {
   try {
-    captureBtn.disabled = true; // zablokuj dopóki kamera nie ruszy
+    captureBtn.disabled = true; 
     video.style.opacity = "0.5";
 
     stream = await navigator.mediaDevices.getUserMedia({ video: true });
     video.srcObject = stream;
-
-    // Czekamy na załadowanie metadanych wideo (rozdzielczość, FPS itp.)
     video.onloadedmetadata = () => {
       console.log("🎥 Kamera gotowa:", video.videoWidth, video.videoHeight);
       captureBtn.disabled = false;
@@ -79,8 +72,6 @@ async function startCamera() {
 cameraBtn.addEventListener("click", startCamera);
 
 // 🔹 ROBIENIE ZDJĘCIA
-// Konwertujemy klatkę z video do obrazu na canvas, następnie do base64.
-// Base64 pozwala na łatwe przechowywanie w localStorage.
 captureBtn.addEventListener("click", () => {
   if (!video.videoWidth) {
     alert("Kamera jeszcze się nie uruchomiła! Poczekaj sekundę.");
@@ -91,11 +82,9 @@ captureBtn.addEventListener("click", () => {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   
-  // Rysujemy obecną klatkę wideo na canvas
   ctx.drawImage(video, 0, 0);
   canvas.style.display = "block";
 
-  // Konwersja do formatu base64 PNG
   const imgData = canvas.toDataURL("image/png");
   console.log("📸 Zdjęcie zapisane:", imgData.substring(0, 30));
 
@@ -104,13 +93,11 @@ captureBtn.addEventListener("click", () => {
 });
 
 // 🔹 POWIADOMIENIA PUSH
-// Wykorzystujemy Notification API do informowania użytkownika o zapisie zdjęcia.
-// Pytamy o pozwolenie tylko raz, przy pierwszym użyciu.
 function notifyUser(msg) {
-  // Sprawdź czy powiadomienia są włączone w ustawieniach
+ 
   const notificationsEnabled = localStorage.getItem("notificationsEnabled");
   if (notificationsEnabled === "false") {
-    return; // Nie wysyłaj powiadomień jeśli wyłączone
+    return; 
   }
 
   if (Notification.permission === "granted") {
@@ -123,16 +110,12 @@ function notifyUser(msg) {
 }
 
 // 🔹 ZARZĄDZANIE GALERIĄ
-// Zdjęcia przechowujemy w localStorage jako stringi base64.
-// To pozwala na działanie galerii offline bez konieczności serwera.
 function savePhoto(data) {
   const photos = JSON.parse(localStorage.getItem("photos") || "[]");
   photos.push(data);
   localStorage.setItem("photos", JSON.stringify(photos));
   loadGallery();
 }
-
-// Wczytuje wszystkie zdjęcia z localStorage i renderuje miniaturki
 function loadGallery() {
   const photos = JSON.parse(localStorage.getItem("photos") || "[]");
   gallery.innerHTML = "";
@@ -156,7 +139,6 @@ function loadGallery() {
   });
 }
 
-// Usuwa zdjęcie po indeksie i odświeża galerię
 function deletePhoto(idx) {
   const photos = JSON.parse(localStorage.getItem("photos") || "[]");
   photos.splice(idx, 1);
@@ -167,8 +149,6 @@ function deletePhoto(idx) {
 galleryBtn.addEventListener("click", loadGallery);
 
 // 🔹 DETEKCJA TRYBU OFFLINE
-// Monitorujemy zdarzenia online/offline aby informować użytkownika
-// o stanie połączenia. Banner pojawia się automatycznie.
 window.addEventListener("online", () =>
   document.getElementById("offlineBanner").classList.add("hidden")
 );
@@ -178,18 +158,13 @@ window.addEventListener("offline", () =>
 );
 
 // 🔹 USTAWIENIA - CIEMNY MOTYW
-// Przełączanie między jasnym a ciemnym trybem wyświetlania.
-// Preferencja jest zapisywana w localStorage.
 const darkModeToggle = document.getElementById("darkModeToggle");
 
-// Wczytaj zapisane ustawienie przy starcie
 const darkModeEnabled = localStorage.getItem("darkMode") === "true";
 if (darkModeEnabled) {
   document.body.classList.add("dark-mode");
   darkModeToggle.checked = true;
 }
-
-// Obsługa zmiany trybu
 darkModeToggle.addEventListener("change", (e) => {
   if (e.target.checked) {
     document.body.classList.add("dark-mode");
@@ -201,25 +176,18 @@ darkModeToggle.addEventListener("change", (e) => {
 });
 
 // 🔹 USTAWIENIA - POWIADOMIENIA
-// Włączanie/wyłączanie powiadomień push.
-// Preferencja jest zapisywana w localStorage.
 const notificationsToggle = document.getElementById("notificationsToggle");
 
-// Wczytaj zapisane ustawienie przy starcie
 const notificationsEnabled = localStorage.getItem("notificationsEnabled");
 if (notificationsEnabled === null) {
-  // Domyślnie włączone
   localStorage.setItem("notificationsEnabled", "true");
   notificationsToggle.checked = true;
 } else {
   notificationsToggle.checked = notificationsEnabled === "true";
 }
-
-// Obsługa zmiany ustawienia
 notificationsToggle.addEventListener("change", (e) => {
   localStorage.setItem("notificationsEnabled", e.target.checked ? "true" : "false");
   
-  // Jeśli włączamy powiadomienia, poproś o pozwolenie
   if (e.target.checked && Notification.permission === "default") {
     Notification.requestPermission();
   }
