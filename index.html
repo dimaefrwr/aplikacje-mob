@@ -11,7 +11,6 @@
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("sw.js");
-
     }
   </script>
 </head>
@@ -21,6 +20,7 @@
     <button id="homeBtn">Home</button>
     <button id="cameraBtn">Camera</button>
     <button id="galleryBtn">Gallery</button>
+    <button id="settingsBtn">Settings</button>
   </header>
 
   <div id="offlineBanner" class="offline hidden">
@@ -50,6 +50,58 @@
   <section id="galleryView" class="view">
     <h1>Gallery</h1>
     <div id="gallery"></div>
+  </section>
+
+  <!-- SETTINGS VIEW -->
+  <section id="settingsView" class="view">
+    <h1>⚙️ Ustawienia</h1>
+
+    <!-- Wygląd -->
+    <div class="settings-section">
+      <h2>🎨 Wygląd</h2>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">Ciemny motyw</span>
+          <p class="setting-description">Przełącz na ciemny tryb wyświetlania</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="darkModeToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Powiadomienia -->
+    <div class="settings-section">
+      <h2>🔔 Powiadomienia</h2>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">Powiadomienia push</span>
+          <p class="setting-description">Otrzymuj powiadomienia o zapisanych zdjęciach</p>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="notificationsToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Informacje -->
+    <div class="settings-section">
+      <h2>ℹ️ Informacje</h2>
+      <div class="info-item">
+        <span class="info-label">Aplikacja:</span>
+        <span class="info-value">PWA Photo Locator</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Wersja:</span>
+        <span class="info-value">1.0.0</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Technologie:</span>
+        <span class="info-value">HTML5, CSS3, JavaScript, Service Worker, PWA</span>
+      </div>
+    </div>
   </section>
 
   <script src="app.js"></script>

@@ -14,10 +14,12 @@ const views = document.querySelectorAll(".view");
 const homeBtn = document.getElementById("homeBtn");
 const cameraBtn = document.getElementById("cameraBtn");
 const galleryBtn = document.getElementById("galleryBtn");
+const settingsBtn = document.getElementById("settingsBtn");
 
 homeBtn.addEventListener("click", () => showView("homeView"));
 cameraBtn.addEventListener("click", () => showView("cameraView"));
 galleryBtn.addEventListener("click", () => showView("galleryView"));
+settingsBtn.addEventListener("click", () => showView("settingsView"));
 
 // Ukrywa wszystkie widoki i pokazuje tylko wybrany
 function showView(id) {
@@ -105,6 +107,12 @@ captureBtn.addEventListener("click", () => {
 // Wykorzystujemy Notification API do informowania użytkownika o zapisie zdjęcia.
 // Pytamy o pozwolenie tylko raz, przy pierwszym użyciu.
 function notifyUser(msg) {
+  // Sprawdź czy powiadomienia są włączone w ustawieniach
+  const notificationsEnabled = localStorage.getItem("notificationsEnabled");
+  if (notificationsEnabled === "false") {
+    return; // Nie wysyłaj powiadomień jeśli wyłączone
+  }
+
   if (Notification.permission === "granted") {
     new Notification(msg);
   } else if (Notification.permission !== "denied") {
@@ -168,3 +176,51 @@ window.addEventListener("online", () =>
 window.addEventListener("offline", () =>
   document.getElementById("offlineBanner").classList.remove("hidden")
 );
+
+// 🔹 USTAWIENIA - CIEMNY MOTYW
+// Przełączanie między jasnym a ciemnym trybem wyświetlania.
+// Preferencja jest zapisywana w localStorage.
+const darkModeToggle = document.getElementById("darkModeToggle");
+
+// Wczytaj zapisane ustawienie przy starcie
+const darkModeEnabled = localStorage.getItem("darkMode") === "true";
+if (darkModeEnabled) {
+  document.body.classList.add("dark-mode");
+  darkModeToggle.checked = true;
+}
+
+// Obsługa zmiany trybu
+darkModeToggle.addEventListener("change", (e) => {
+  if (e.target.checked) {
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("darkMode", "true");
+  } else {
+    document.body.classList.remove("dark-mode");
+    localStorage.setItem("darkMode", "false");
+  }
+});
+
+// 🔹 USTAWIENIA - POWIADOMIENIA
+// Włączanie/wyłączanie powiadomień push.
+// Preferencja jest zapisywana w localStorage.
+const notificationsToggle = document.getElementById("notificationsToggle");
+
+// Wczytaj zapisane ustawienie przy starcie
+const notificationsEnabled = localStorage.getItem("notificationsEnabled");
+if (notificationsEnabled === null) {
+  // Domyślnie włączone
+  localStorage.setItem("notificationsEnabled", "true");
+  notificationsToggle.checked = true;
+} else {
+  notificationsToggle.checked = notificationsEnabled === "true";
+}
+
+// Obsługa zmiany ustawienia
+notificationsToggle.addEventListener("change", (e) => {
+  localStorage.setItem("notificationsEnabled", e.target.checked ? "true" : "false");
+  
+  // Jeśli włączamy powiadomienia, poproś o pozwolenie
+  if (e.target.checked && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+});

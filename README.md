@@ -1,7 +1,3 @@
-# 📸 PWA Photo Locator
-
-![PWA](https://img.shields.io/badge/PWA-enabled-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
 
 ## 📋 Opis projektu
 Progressive Web App umożliwiająca robienie zdjęć z automatycznym zapisywaniem lokalizacji. Aplikacja działa offline i może być zainstalowana na urządzeniu mobilnym.

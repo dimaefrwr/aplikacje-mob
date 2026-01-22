@@ -19,28 +19,34 @@ self.addEventListener('install', event => {
 
 // NOWY, POPRAWNY FETCH!
 self.addEventListener('fetch', event => {
-
   const request = event.request;
 
-  // 🔥 1. Ignoruj żądania blob, data:base64, camera, chrome-extension itd.
+  // Ignoruj żądania blob, data:base64, camera, chrome-extension itd.
   if (
     request.url.startsWith("blob:") ||
     request.url.startsWith("data:") ||
     request.url.includes("chrome-extension") ||
+    request.url.includes("browser-sync") ||
     request.destination === 'video' ||
     request.destination === 'image' && request.url.includes('blob')
   ) {
     return; // NIE przechwytuj
   }
 
-  // 🔥 2. Normalne cache-first dla plików statycznych
+  // Cache-first dla plików statycznych
   event.respondWith(
     caches.match(request).then(cached => {
       if (cached) return cached;
 
       return fetch(request)
         .then(response => {
-          return response;
+          if (!response || response.status !== 200) {
+            return response;
+          }
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(request, response.clone());
+            return response;
+          });
         })
         .catch(() => {
           if (request.mode === 'navigate') {
