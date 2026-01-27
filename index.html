@@ -17,93 +17,316 @@
 
 <body>
   <header>
-    <button id="homeBtn">Home</button>
-    <button id="cameraBtn">Camera</button>
-    <button id="galleryBtn">Gallery</button>
-    <button id="settingsBtn">Settings</button>
+    <button id="homeBtn" class="nav-btn">
+      <span class="btn-icon">🏠</span>
+      <span class="btn-text">Home</span>
+    </button>
+    <button id="cameraBtn" class="nav-btn">
+      <span class="btn-icon">📷</span>
+      <span class="btn-text">Camera</span>
+    </button>
+    <button id="galleryBtn" class="nav-btn">
+      <span class="btn-icon">🖼️</span>
+      <span class="btn-text">Gallery</span>
+    </button>
+    <button id="settingsBtn" class="nav-btn">
+      <span class="btn-icon">⚙️</span>
+      <span class="btn-text">Settings</span>
+    </button>
   </header>
 
   <div id="offlineBanner" class="offline hidden">
-    Jesteś offline — niektóre funkcje mogą nie działać
+    ⚠️ Jesteś offline — niektóre funkcje mogą nie działać
   </div>
 
   <!-- HOME VIEW -->
   <section id="homeView" class="view active">
-    <h1>Home</h1>
-    <p>Witaj w aplikacji PWA!</p>
+    <div class="view-container">
+      <h1>📍 Lokalizacja GPS</h1>
+      <p class="subtitle">Pobierz swoją aktualną pozycję</p>
 
-    <button id="getLocation">Pobierz lokalizację</button>
-    <p id="locationOutput"></p>
+      <button id="getLocation" class="primary-btn">
+        <span class="btn-icon">🌍</span>
+        Pobierz lokalizację
+      </button>
+
+      <div id="locationCard" class="location-card hidden">
+        <div class="card-header">
+          <h3>📍 Twoja pozycja</h3>
+          <span class="status-badge">✓ Aktywna</span>
+        </div>
+        
+        <div class="address-section">
+          <div class="address-icon">📮</div>
+          <div class="address-text">
+            <div class="address-main" id="addressMain">Wyszukiwanie adresu...</div>
+            <div class="address-details" id="addressDetails"></div>
+          </div>
+        </div>
+
+        <div class="location-details">
+          <div class="detail-item">
+            <span class="detail-label">Szerokość geograficzna:</span>
+            <span class="detail-value" id="latValue">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Długość geograficzna:</span>
+            <span class="detail-value" id="lngValue">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Dokładność:</span>
+            <span class="detail-value" id="accuracyValue">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Czas pobrania:</span>
+            <span class="detail-value" id="timeValue">-</span>
+          </div>
+        </div>
+        <a id="mapsLink" href="#" target="_blank" class="maps-btn hidden">
+          🗺️ Otwórz w Google Maps
+        </a>
+      </div>
+
+      <p id="locationOutput" class="error-message"></p>
+
+      <!-- STATYSTYKI -->
+      <div class="stats-card">
+        <h2>📊 Statystyki</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="totalPhotos">0</div>
+            <div class="stat-label">Wszystkie zdjęcia</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="totalAlbums">0</div>
+            <div class="stat-label">Albumy</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- CAMERA VIEW -->
   <section id="cameraView" class="view">
-    <h1>Camera</h1>
+    <div class="view-container">
+      <h1>📷 Aparat</h1>
+      <p class="subtitle">Zrób zdjęcie i zapisz do albumu</p>
 
-    <video id="camera" autoplay></video>
-    <button id="captureBtn">Zrób zdjęcie</button>
+      <div class="album-selector">
+        <label for="albumSelect">Album:</label>
+        <select id="albumSelect">
+          <option value="Wszystkie">📁 Wszystkie zdjęcia</option>
+        </select>
+        <button id="createAlbumBtn" class="small-btn">➕ Nowy</button>
+      </div>
 
-    <canvas id="photoCanvas"></canvas>
+      <div class="camera-container">
+        <video id="camera" autoplay playsinline></video>
+        <button id="captureBtn" class="capture-btn">
+          <span class="capture-icon">📸</span>
+        </button>
+      </div>
+
+      <canvas id="photoCanvas"></canvas>
+    </div>
   </section>
 
   <!-- GALLERY VIEW -->
   <section id="galleryView" class="view">
-    <h1>Gallery</h1>
-    <div id="gallery"></div>
+    <div class="view-container">
+      <div class="gallery-header">
+        <h1>🖼️ Galeria</h1>
+        <div class="gallery-controls">
+          <select id="galleryAlbumFilter" class="album-filter">
+            <option value="Wszystkie">📁 Wszystkie albumy</option>
+          </select>
+          <span id="photoCount" class="gallery-info">0 zdjęć</span>
+        </div>
+      </div>
+
+      <div id="gallery" class="gallery-grid"></div>
+      
+      <div id="emptyGallery" class="empty-state">
+        <div class="empty-icon">📷</div>
+        <h3>Brak zdjęć</h3>
+        <p>Przejdź do aparatu i zrób pierwsze zdjęcie!</p>
+      </div>
+    </div>
   </section>
 
   <!-- SETTINGS VIEW -->
   <section id="settingsView" class="view">
-    <h1>⚙️ Ustawienia</h1>
+    <div class="view-container">
+      <h1>⚙️ Ustawienia</h1>
 
-    <!-- Wygląd -->
-    <div class="settings-section">
-      <h2>🎨 Wygląd</h2>
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Ciemny motyw</span>
-          <p class="setting-description">Przełącz na ciemny tryb wyświetlania</p>
+      <!-- Motywy kolorystyczne -->
+      <div class="settings-section">
+        <h2>🎨 Motyw kolorystyczny</h2>
+        <div class="theme-selector">
+          <button class="theme-btn active" data-theme="purple">
+            <span class="theme-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></span>
+            <span>Fioletowy</span>
+          </button>
+          <button class="theme-btn" data-theme="blue">
+            <span class="theme-color" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)"></span>
+            <span>Niebieski</span>
+          </button>
+          <button class="theme-btn" data-theme="green">
+            <span class="theme-color" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%)"></span>
+            <span>Zielony</span>
+          </button>
+          <button class="theme-btn" data-theme="pink">
+            <span class="theme-color" style="background: linear-gradient(135deg, #ec008c 0%, #fc6767 100%)"></span>
+            <span>Różowy</span>
+          </button>
+          <button class="theme-btn" data-theme="orange">
+            <span class="theme-color" style="background: linear-gradient(135deg, #f46b45 0%, #eea849 100%)"></span>
+            <span>Pomarańczowy</span>
+          </button>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="darkModeToggle">
-          <span class="toggle-slider"></span>
-        </label>
       </div>
-    </div>
 
-    <!-- Powiadomienia -->
-    <div class="settings-section">
-      <h2>🔔 Powiadomienia</h2>
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Powiadomienia push</span>
-          <p class="setting-description">Otrzymuj powiadomienia o zapisanych zdjęciach</p>
+      <!-- Albumy -->
+      <div class="settings-section">
+        <h2>📁 Zarządzaj albumami</h2>
+        <div id="albumsList" class="albums-list"></div>
+      </div>
+
+      <!-- Eksport -->
+      <div class="settings-section">
+        <h2>📥 Eksport</h2>
+        <div class="export-section">
+          <label for="exportAlbumSelect">Wybierz album do eksportu:</label>
+          <select id="exportAlbumSelect" class="export-select">
+            <option value="Wszystkie">📁 Wszystkie albumy</option>
+          </select>
+          <button id="exportPdfBtn" class="action-btn">📄 Eksportuj do PDF</button>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="notificationsToggle">
-          <span class="toggle-slider"></span>
-        </label>
       </div>
-    </div>
 
-    <!-- Informacje -->
-    <div class="settings-section">
-      <h2>ℹ️ Informacje</h2>
-      <div class="info-item">
-        <span class="info-label">Aplikacja:</span>
-        <span class="info-value">PWA Photo Locator</span>
+      <!-- Wygląd -->
+      <div class="settings-section">
+        <h2>🌓 Tryb wyświetlania</h2>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Ciemny motyw</span>
+            <p class="setting-description">Przełącz na ciemny tryb wyświetlania</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="info-label">Wersja:</span>
-        <span class="info-value">1.0.0</span>
+
+      <!-- Powiadomienia -->
+      <div class="settings-section">
+        <h2>🔔 Powiadomienia</h2>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Powiadomienia push</span>
+            <p class="setting-description">Otrzymuj powiadomienia o zapisanych zdjęciach</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notificationsToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="info-label">Technologie:</span>
-        <span class="info-value">HTML5, CSS3, JavaScript, Service Worker, PWA</span>
+
+      <!-- Informacje -->
+      <div class="settings-section">
+        <h2>ℹ️ Informacje</h2>
+        <div class="info-item">
+          <span class="info-label">Aplikacja:</span>
+          <span class="info-value">PWA Photo Locator</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Wersja:</span>
+          <span class="info-value">2.0.0</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Technologie:</span>
+          <span class="info-value">HTML5, CSS3, JavaScript, Service Worker, PWA</span>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- PHOTO MODAL -->
+  <div id="photoModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close">✕</button>
+      <img id="modalImage" src="" alt="Zdjęcie">
+      <div class="modal-toolbar">
+        <button id="rotateBtn" class="tool-btn" title="Obróć">↻</button>
+        <button id="filterBtn" class="tool-btn" title="Filtry">🎨</button>
+        <button id="textBtn" class="tool-btn" title="Dodaj tekst">📝</button>
+      </div>
+      <div class="modal-info">
+        <p id="modalAlbum"></p>
+        <p id="modalDate"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER MODAL -->
+  <div id="filterModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-small">
+      <h3>🎨 Wybierz filtr</h3>
+      <div class="filter-buttons">
+        <button class="filter-btn" data-filter="grayscale">⬛ Czarno-białe</button>
+        <button class="filter-btn" data-filter="sepia">🟫 Sepia</button>
+        <button class="filter-btn" data-filter="invert">🔄 Negatyw</button>
+        <button class="filter-btn" data-filter="blur">💫 Rozmycie</button>
+        <button class="filter-btn" data-filter="brightness">☀️ Jasność</button>
+        <button class="filter-btn" data-filter="contrast">🔆 Kontrast</button>
+      </div>
+      <button id="closeFilterModal" class="secondary-btn">Zamknij</button>
+    </div>
+  </div>
+
+  <!-- TEXT MODAL -->
+  <div id="textModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-small">
+      <h3>📝 Dodaj tekst do zdjęcia</h3>
+      <input type="text" id="photoText" placeholder="Wpisz tekst...">
+      <input type="color" id="textColor" value="#ffffff">
+      <div class="modal-buttons">
+        <button id="cancelText" class="secondary-btn">Anuluj</button>
+        <button id="saveText" class="primary-btn-small">Dodaj</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE ALBUM MODAL -->
+  <div id="createAlbumModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content-small">
+      <h3>➕ Nowy album</h3>
+      <input type="text" id="newAlbumName" placeholder="Nazwa albumu" maxlength="30">
+      <div class="emoji-selector">
+        <span class="emoji-option" data-emoji="📁">📁</span>
+        <span class="emoji-option" data-emoji="🚗">🚗</span>
+        <span class="emoji-option" data-emoji="🏖️">🏖️</span>
+        <span class="emoji-option" data-emoji="🎉">🎉</span>
+        <span class="emoji-option" data-emoji="👨‍👩‍👧‍👦">👨‍👩‍👧‍👦</span>
+        <span class="emoji-option" data-emoji="💼">💼</span>
+        <span class="emoji-option" data-emoji="🎓">🎓</span>
+        <span class="emoji-option" data-emoji="🏠">🏠</span>
+      </div>
+      <input type="hidden" id="selectedEmoji" value="📁">
+      <div class="modal-buttons">
+        <button id="cancelAlbumBtn" class="secondary-btn">Anuluj</button>
+        <button id="saveAlbumBtn" class="primary-btn-small">Utwórz</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
