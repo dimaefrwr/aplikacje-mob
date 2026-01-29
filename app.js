@@ -1,15 +1,3 @@
-/**
- * PWA Photo Locator - Main Application File
- * 
- * Struktura:
- * - Linie 1-50:    Service Worker, widoki, inicjalizacja
- * - Linie 51-150:  Statystyki, geolokalizacja z reverse geocoding
- * - Linie 151-350: Zarządzanie albumami (tworzenie, usuwanie, emoji)
- * - Linie 351-450: Kamera i zapisywanie zdjęć z lokalizacją
- * - Linie 451-550: Galeria, przeglądanie, usuwanie
- * - Linie 551-700: Edycja zdjęć (obrót, filtry, tekst)
- * - Linie 701-800: Eksport PDF z lokalizacją, motywy, ustawienia
- */
 
 //🔹 REJESTRACJA SERVICE WORKERA
 if ("serviceWorker" in navigator) {
