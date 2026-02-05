@@ -24,13 +24,16 @@ export class GalleryManager {
     this.photoCount.textContent = `${filteredPhotos.length} ${filteredPhotos.length === 1 ? 'zdjęcie' : 'zdjęć'}`;
     
     if (filteredPhotos.length === 0) {
-      this.gallery.innerHTML = "";
+      // ✅ Bezpieczne czyszczenie
+      this.gallery.replaceChildren();
       this.emptyGallery.classList.remove("hidden");
       return;
     }
     
     this.emptyGallery.classList.add("hidden");
-    this.gallery.innerHTML = "";
+    
+    // ✅ Bezpieczne czyszczenie
+    this.gallery.replaceChildren();
 
     filteredPhotos.forEach((photo, index) => {
       const originalIndex = photos.indexOf(photo);

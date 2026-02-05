@@ -56,7 +56,9 @@ export class AlbumsManager {
     
     [albumSelect, galleryAlbumFilter, exportAlbumSelect].forEach(select => {
       if (!select) return;
-      select.innerHTML = '';
+      
+      // ✅ Bezpieczne czyszczenie - zamiast innerHTML = ''
+      select.replaceChildren();
       
       albums.forEach(album => {
         const option = document.createElement('option');
@@ -120,11 +122,17 @@ export class AlbumsManager {
     if (!albumsList) return;
     
     if (albums.length === 0) {
-      albumsList.innerHTML = '<p style="color: #666;">Brak utworzonych albumów</p>';
+      // ✅ Bezpieczne czyszczenie i dodawanie
+      albumsList.replaceChildren();
+      const emptyMsg = document.createElement('p');
+      emptyMsg.style.color = '#666';
+      emptyMsg.textContent = 'Brak utworzonych albumów';
+      albumsList.appendChild(emptyMsg);
       return;
     }
     
-    albumsList.innerHTML = '';
+    // ✅ Bezpieczne czyszczenie
+    albumsList.replaceChildren();
     
     albums.forEach(album => {
       const photos = JSON.parse(localStorage.getItem("photos") || "[]");

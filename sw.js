@@ -1,96 +1,64 @@
-const CACHE_NAME = "pwa-photo-locator-v4";
-
-const urlsToCache = [
+const CACHE = "v14";
+const FILES = [
   "/",
   "/index.html",
   "/styles.css",
   "/manifest.json",
   "/js/main.js",
-  "/js/serviceWorker.js",
-  "/js/utils.js",
-  "/js/navigation.js",
-  "/js/geolocation.js",
   "/js/albums.js",
   "/js/camera.js",
   "/js/gallery.js",
+  "/js/geolocation.js",
+  "/js/navigation.js",
   "/js/photoEditor.js",
-  "/js/settings.js"
+  "/js/serviceWorker.js",
+  "/js/settings.js",
+  "/js/utils.js",
+  "/icons/icon-256.png",
+  "/icons/icon-512.png"
 ];
 
-self.addEventListener("install", event => {
-  console.log("📦 Service Worker: Instalacja...");
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log("✅ Cache otwarty, dodawanie plików...");
-      return cache.addAll(urlsToCache);
+self.addEventListener("install", function(e) {
+  console.log("INSTALL v14");
+  self.skipWaiting(); // NATYCHMIAST!
+  e.waitUntil(
+    caches.open(CACHE).then(function(cache) {
+      return cache.addAll(FILES);
     })
   );
-  self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
-  console.log("🔄 Service Worker: Aktywacja...");
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log("🗑️ Usuwanie starego cache:", cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-  return self.clients.claim();
-});
-
-self.addEventListener("fetch", event => {
-  const { request } = event;
-  
-  // Ignoruj blob/data URLs
-  if (request.url.startsWith("blob:") || request.url.startsWith("data:")) {
-    return;
-  }
-  
-  // Network only dla zewnętrznych API
-  if (request.url.includes("nominatim.openstreetmap.org") || 
-      request.url.includes("cdnjs.cloudflare.com")) {
-    event.respondWith(
-      fetch(request).catch(() => {
-        return new Response("Offline - API niedostępne", { status: 503 });
+self.addEventListener("activate", function(e) {
+  console.log("ACTIVATE v14");
+  e.waitUntil(
+    caches.keys()
+      .then(function(keys) {
+        return Promise.all(keys.map(function(k) {
+          if (k !== CACHE) return caches.delete(k);
+        }));
       })
-    );
-    return;
-  }
+      .then(function() {
+        return self.clients.claim(); // PRZEJMIJ KONTROLĘ!
+      })
+  );
+});
 
-  // Cache First dla wszystkiego innego
-  event.respondWith(
-    caches.match(request).then(cachedResponse => {
-      if (cachedResponse) {
-        console.log("✅ Z cache:", request.url);
-        return cachedResponse;
+self.addEventListener("fetch", function(e) {
+  console.log("FETCH:", e.request.url);
+  
+  if (e.request.method !== "GET") return;
+  
+  e.respondWith(
+    caches.match(e.request).then(function(r) {
+      if (r) {
+        console.log("FROM CACHE:", e.request.url);
+        return r;
       }
-      
-      return fetch(request).then(networkResponse => {
-        // Nie cachuj niepoprawnych odpowiedzi
-        if (!networkResponse || networkResponse.status !== 200) {
-          return networkResponse;
+      return fetch(e.request).catch(function() {
+        console.log("OFFLINE FALLBACK");
+        if (e.request.mode === "navigate") {
+          return caches.match("/index.html");
         }
-        
-        // Cachuj nowe zasoby
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(request, responseToCache);
-        });
-        
-        return networkResponse;
-      }).catch(() => {
-        // Offline fallback - zwróć index.html dla navigation
-        if (request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-        return new Response("Offline", { status: 503 });
       });
     })
   );
