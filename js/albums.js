@@ -57,7 +57,7 @@ export class AlbumsManager {
     [albumSelect, galleryAlbumFilter, exportAlbumSelect].forEach(select => {
       if (!select) return;
       
-      // ✅ Bezpieczne czyszczenie - zamiast innerHTML = ''
+      
       select.replaceChildren();
       
       albums.forEach(album => {
@@ -122,7 +122,7 @@ export class AlbumsManager {
     if (!albumsList) return;
     
     if (albums.length === 0) {
-      // ✅ Bezpieczne czyszczenie i dodawanie
+    
       albumsList.replaceChildren();
       const emptyMsg = document.createElement('p');
       emptyMsg.style.color = '#666';
@@ -131,7 +131,7 @@ export class AlbumsManager {
       return;
     }
     
-    // ✅ Bezpieczne czyszczenie
+   
     albumsList.replaceChildren();
     
     albums.forEach(album => {

@@ -20,7 +20,7 @@ const FILES = [
 
 self.addEventListener("install", function(e) {
   console.log("INSTALL v14");
-  self.skipWaiting(); // NATYCHMIAST!
+  self.skipWaiting(); 
   e.waitUntil(
     caches.open(CACHE).then(function(cache) {
       return cache.addAll(FILES);
@@ -38,7 +38,7 @@ self.addEventListener("activate", function(e) {
         }));
       })
       .then(function() {
-        return self.clients.claim(); // PRZEJMIJ KONTROLĘ!
+        return self.clients.claim(); 
       })
   );
 });

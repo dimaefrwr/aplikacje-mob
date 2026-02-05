@@ -24,7 +24,7 @@ export class GalleryManager {
     this.photoCount.textContent = `${filteredPhotos.length} ${filteredPhotos.length === 1 ? 'zdjęcie' : 'zdjęć'}`;
     
     if (filteredPhotos.length === 0) {
-      // ✅ Bezpieczne czyszczenie
+      
       this.gallery.replaceChildren();
       this.emptyGallery.classList.remove("hidden");
       return;
@@ -32,7 +32,7 @@ export class GalleryManager {
     
     this.emptyGallery.classList.add("hidden");
     
-    // ✅ Bezpieczne czyszczenie
+    
     this.gallery.replaceChildren();
 
     filteredPhotos.forEach((photo, index) => {
