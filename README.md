@@ -31,16 +31,26 @@ Progressive Web App umożliwiająca robienie zdjęć z automatycznym zapisywanie
 ## 📦 Struktura projektu
 ```
 pwa-photo-locator/
-├── index.html          # Główny plik HTML
-├── app.js             # Logika aplikacji
-├── styles.css         # Stylowanie
-├── sw.js              # Service Worker
-├── manifest.json      # PWA manifest
-├── package.json       # Zależności npm
-├── README.md          # Dokumentacja
-└── icons/             # Ikony aplikacji
-    ├── icon-256.png
-    └── icon-512.png
+├── index.html              # Główny plik HTML
+├── styles.css              # Stylowanie
+├── sw.js                   # Service Worker
+├── manifest.json           # PWA manifest
+├── package.json            # Zależności npm
+├── README.md               # Dokumentacja
+├── icons/                  # Ikony aplikacji
+│   ├── icon-256.png
+│   └── icon-512.png
+└── js/                     # Moduły JavaScript (ES6)
+    ├── main.js             # Punkt wejścia aplikacji
+    ├── serviceWorker.js    # Rejestracja Service Workera
+    ├── utils.js            # Funkcje pomocnicze (modal, notyfikacje, statystyki)
+    ├── navigation.js       # Zarządzanie widokami
+    ├── geolocation.js      # GPS + reverse geocoding
+    ├── albums.js           # Zarządzanie albumami
+    ├── camera.js           # Obsługa kamery
+    ├── gallery.js          # Galeria zdjęć
+    ├── photoEditor.js      # Edycja zdjęć (obrót, filtry, tekst)
+    └── settings.js         # Ustawienia (motywy, dark mode, eksport PDF)
 ```
 
 ## 🚀 Instalacja i uruchomienie
